@@ -1,0 +1,8 @@
+.app {
+  padding: 1vw;
+}
+.app .app-content {
+  display: grid;
+  grid-template-columns: 10vw auto 10vw;
+  column-gap: 1vw;
+}

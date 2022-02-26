@@ -1,0 +1,7 @@
+#feature-menu div {
+  margin-bottom: 5px;
+}
+#feature-menu div button {
+  width: 100%;
+  text-align: left;
+}
