@@ -1,9 +1,13 @@
 import { createSlice } from '@reduxjs/toolkit';
 
+
+export interface ColorCounter {
+	[key: number]: number;
+}
+
+
 export interface ControlsSliceState {
-	onMouseDown?: (ev: MouseEvent) => void;
-	onMouseUp?: (ev: MouseEvent) => void;
-	onClick?: (ev: MouseEvent) => void;
+	colors: ColorCounter
 }
 
 export const ControlsSlice = createSlice({
@@ -13,18 +17,12 @@ export const ControlsSlice = createSlice({
 	} as ControlsSliceState,
 
 	reducers: {
-		setOnCanvasClick(state, action) {
-			state.onClick = action.payload;
+		setColors(state, action) {
+			state.colors = action.payload;
 		},
-		setOnCanvasMouseDown(state, action) {
-			state.onMouseDown = action.payload;
-		},
-		setOnCanvasMouseUp(state, action) {
-			state.onMouseUp = action.payload;
-		}
 	},
 })
 
-export const { setOnCanvasClick, setOnCanvasMouseDown, setOnCanvasMouseUp } = ControlsSlice.actions;
+export const { setColors } = ControlsSlice.actions;
 
 export default ControlsSlice.reducer;

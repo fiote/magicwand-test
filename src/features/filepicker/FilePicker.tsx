@@ -1,11 +1,14 @@
 import React, { createRef } from 'react';
+import { useDispatch } from 'react-redux';
 import { createImageFromBase64, getFileAsBase64, setImageToCanvas } from '../canvas/Canvas';
+import { setColors } from '../canvas/controlsSlice';
 import MenuButton from '../menu/MenuButton';
+import { setMenuActive } from '../menu/menuSlice';
 
 import './FilePicker.css';
 
 const FilePicker = () => {
-
+	const dispatch = useDispatch();
 	const ref = createRef<HTMLInputElement>();
 
 	const onClick = () => {
@@ -21,7 +24,11 @@ const FilePicker = () => {
 		if (!base64) return;
 
 		const image = await createImageFromBase64(base64);
-		setImageToCanvas(image);
+		const { colors } = await setImageToCanvas(image);
+		dispatch(setColors(colors));
+
+		ref.current.value = '';
+		dispatch(setMenuActive(''));
 	};
 
 	return (

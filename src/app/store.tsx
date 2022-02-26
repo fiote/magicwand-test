@@ -5,7 +5,7 @@ import controlReducer from '../features/canvas/controlsSlice';
 const store = configureStore({
 	reducer: {
 		menu: menuReducer,
-		canvas: controlReducer
+		controls: controlReducer
 	},
 })
 
