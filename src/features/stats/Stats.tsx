@@ -13,7 +13,7 @@ const CanvasStats = () => {
 	const blockDivs = Object.keys(controls).map(block => {
 		const list = controls[block];
 
-		const colors = Object.keys(list || {}).map(key => parseInt(key)).filter(key => key).map(key => ({color: key, count: list[key]}));
+		const colors = Object.keys(list || {}).map(key => parseInt(key)).filter(key => key !== null).map(key => ({color: key, count: list[key]}));
 		colors.sort((a,b) => b.count - a.count);
 
 		const colorDivs = colors.map(entry => {
