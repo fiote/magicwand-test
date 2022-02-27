@@ -146,10 +146,10 @@ export const readCanvasGrid = () => {
 	for (let x = min.x; x < max.x; x++) {
 		for (let y = min.y; y < max.y; y++) {
 			const id = getPointId(x, y);
-			const [r,g,b] = ctx.getImageData(x, y, 1, 1).data;
+			const [r,g,b,a] = ctx.getImageData(x, y, 1, 1).data;
 			const rgb = [r,g,b] as v3;
 			const color = getIntFromRGB(rgb);
-			canvasGrid[id] = {id, block: 0, x, y, rgb, color};
+			if (color || a) canvasGrid[id] = {id, block: 0, x, y, rgb, color};
 		}
 	}
 };
