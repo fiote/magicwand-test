@@ -1,12 +1,12 @@
-import { checkSelection, checkTotal, clickCanvas, openImage } from "../../support/functions";
+import { checkRow, checkTotal, clickCanvas, openImage } from "../../support/functions";
 
 describe('Testing simple selection', () => {
 	it('image#1', () => {
 		openImage('image-4.png');
 
 		clickCanvas(161, 247);
-		checkSelection(0, '#799DE6', 1194);
-		checkSelection(1, '#739CE5', 933);
+		checkRow('selection', 0, '#799DE6', 1194);
+		checkRow('selection', 1, '#739CE5', 933);
 		checkTotal('selection', 2);
 	});
 });
@@ -31,7 +31,7 @@ describe('Testing switching selections', () => {
 		checkTotal('selection', 2);
 
 		clickCanvas(341, 370);
-		checkSelection(0, '#19100F', 399);
+		checkRow('selection', 0, '#19100F', 399);
 		checkTotal('selection', 1);
 
 	});
