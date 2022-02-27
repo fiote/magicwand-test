@@ -1,20 +1,46 @@
-import React from 'react';
+import React, { createRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { canvasGrid, getCanvasPoint, getPointId, paintPixel, Point, readCanvasGrid, setCanvasListener, v3 } from '../canvas/Canvas';
 import { ColorCounter, setColors } from '../canvas/controlsSlice';
 import MenuButton from '../menu/MenuButton';
+import MenuConfig from '../menu/MenuConfig';
+import './MagicWand.css';
 
 const MagicWand = () => {
 	const dispatch = useDispatch();
 
 	setCanvasListener('magicwand', 'onMouseUp', (x, y) => {
 		const { colors } = execMagicWandAt(x,y);
-		dispatch(setColors({key: 'Selection', list: colors}));
+		forwardColors(colors);
 	});
+
+	const [valueTolerance, setTolerance] = useState(2);
+
+	const ref = createRef<HTMLInputElement>();
+
+	const onMouseUpTolerance = (event: React.MouseEvent<HTMLInputElement>) => {
+		if (!ref.current) return;
+		const tol = parseFloat(ref.current.value);
+		setTolerance(tol);
+		const { colors } = applyMagicTolerance(tol);
+		if (colors) forwardColors(colors);
+	};
+
+	const forwardColors = (colors: ColorCounter) => {
+		dispatch(setColors({key: 'Selection', list: colors}));
+	};
 
 	return (
 		<div id='feature-magicwand'>
 			<MenuButton code='magicwand' icon='magic' label='Magic Wand' />
+			<MenuConfig code='magicwand'>
+				<div id='tolerance-block' className='config-block'>
+					<label>Tolerance:</label>
+					<div className='slider'>
+						<input ref={ref} id="tolerance" type="range" min="0" max="50" onMouseUp={onMouseUpTolerance} defaultValue={valueTolerance} step="0.1" /> <div className='tolerance'> {valueTolerance.toFixed(1)}</div>
+					</div>
+				</div>
+			</MenuConfig>
 		</div>
 	)
 }
@@ -26,8 +52,11 @@ export default MagicWand;
 
 let paintedBorder = [] as number[];
 let selectedArea = [] as number[];
+let lastClicked = null as {x: number, y:number} | null;
+let magicTolerance = 2;
 
-const execMagicWandAt = (x: number, y: number) => {
+const execMagicWandAt = (x: number, y: number, force: boolean = false) => {
+	lastClicked = {x, y};
 	const colors = {} as ColorCounter;
 
 	// 'unpaiting' any border already painted
@@ -40,8 +69,9 @@ const execMagicWandAt = (x: number, y: number) => {
 	const point = getCanvasPoint(x,y);
 	// if it does not exist, stop here
 	if (!point) return { colors };
+
 	// if we're clicking inside of the selected area, stop here
-	if (selectedArea.includes(point.id)) {
+	if (selectedArea.includes(point.id) && !force) {
 		selectedArea = [];
 		return { colors };
 	}
@@ -63,6 +93,19 @@ const execMagicWandAt = (x: number, y: number) => {
 	return { colors };
 }
 
+const applyMagicTolerance = (value: number) => {
+	magicTolerance = value;
+	if (!lastClicked) return { };
+	const { colors } = execMagicWandAt(lastClicked.x, lastClicked.y, true);
+	return { colors };
+}
+
+export const resetMagicWand = () => {
+	lastClicked = null;
+	paintedBorder = [];
+	selectedArea = [];
+};
+
 const adders = [[0,-1], [0,+1], [-1,0], [+1,0]];
 let nextBlockId = 0;
 
@@ -71,8 +114,6 @@ const getAreaAroundPoint = (clicked: Point, extra: boolean = false) => {
 
 	// create a map to mark every pixel with the answer "does this color is within tolerance-distance of thec clicked point?""
 	const map = [] as number[][];
-
-	const tolerance = 1;
 
 	// for every pixel
 	for(const p1 of canvasGrid) {
@@ -84,7 +125,7 @@ const getAreaAroundPoint = (clicked: Point, extra: boolean = false) => {
 		// if there is no map for its line yet, create one
 		if (!map[y]) map[y] = [];
 		// then map its pixel flag
-		map[y][x] = delta <= tolerance ? 1 : 0;
+		map[y][x] = delta <= magicTolerance ? 1 : 0;
 	}
 	// increasing the blocker count	and setting it for the clicked pixel
 	clicked.block = ++nextBlockId;
