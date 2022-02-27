@@ -7,7 +7,7 @@ describe('Testing simple selection', () => {
 		clickCanvas(161, 247);
 		checkRow('selection', 0, '#799DE6', 1194);
 		checkRow('selection', 1, '#739CE5', 933);
-		checkTotal('selection', 2);
+		checkTotal('selection', 3);
 	});
 });
 
@@ -16,7 +16,7 @@ describe('Testing clearing a seletion', () => {
 		openImage('image-4.png');
 
 		clickCanvas(161, 247);
-		checkTotal('selection', 2);
+		checkTotal('selection', 3);
 
 		clickCanvas(161, 247);
 		checkTotal('selection', 0);
@@ -28,7 +28,7 @@ describe('Testing switching selections', () => {
 		openImage('image-4.png');
 
 		clickCanvas(161, 247);
-		checkTotal('selection', 2);
+		checkTotal('selection', 3);
 
 		clickCanvas(341, 370);
 		checkRow('selection', 0, '#19100F', 399);
