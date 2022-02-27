@@ -1,10 +1,19 @@
 #feature-menu {
   padding: 10px;
 }
-#feature-menu div {
+#feature-menu > div {
   margin-bottom: 5px;
 }
-#feature-menu div button {
+#feature-menu > div button {
   width: 100%;
   text-align: left;
+}
+.menu-config {
+  display: none;
+  border: 1px solid #e6e6e6;
+  border-top: 0px;
+  border-radius: 0px 0px 5px 5px;
+}
+.menu-config.config-visible {
+  display: block;
 }
