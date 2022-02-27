@@ -5,9 +5,17 @@ export interface ColorCounter {
 	[key: number]: number;
 }
 
+export interface ColorCount {
+	color: number;
+	count: number;
+}
+
 
 export interface ControlsSliceState {
-	[key: string]: ColorCounter
+	[key: string]: {
+		top50: ColorCount[];
+		total: number;
+	}
 }
 
 export const ControlsSlice = createSlice({
@@ -19,7 +27,12 @@ export const ControlsSlice = createSlice({
 	reducers: {
 		setColors(state, action) {
 			const { key, list } = action.payload;
-			state[key] = list;
+
+			const arraylist = Object.keys(list).map<ColorCount>(color => ({color: parseInt(color), count: list[color]}));
+			arraylist.sort((a,b) => b.count - a.count);
+			const top50 = arraylist.slice(0,50);
+
+			state[key] = {top50, total: arraylist.length};
 		},
 	},
 })
