@@ -1,6 +1,7 @@
 import React, { createRef, useLayoutEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../app/store';
+import { resetMagicWand } from '../magicwand/MagicWand';
 import { MenuState } from '../menu/menuSlice';
 import './Canvas.css';
 import { ColorCounter } from './controlsSlice';
@@ -124,10 +125,10 @@ export const setImageToCanvas = (image: HTMLImageElement) : {colors?: ColorCount
 	bounds.max.y = sy + iHeight;
 
     ctx.drawImage(image, sx, sy, iWidth, iHeight);
-
 	readCanvasGrid();
-
 	const colors = getCanvasColors();
+
+	resetMagicWand();
 
 	return { colors };
 };
