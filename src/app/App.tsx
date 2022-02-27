@@ -25,12 +25,9 @@ export const AppContent = () => {
 		<div className="app-content">
 			<Menu>
 				<FilePicker />
-				<Pencil />
 				<MagicWand />
 			</Menu>
-
 			<Canvas />
-
 			<Stats />
 		</div>
 	)

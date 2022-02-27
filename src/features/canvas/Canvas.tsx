@@ -1,5 +1,6 @@
 import React, { createRef, useLayoutEffect } from 'react';
 import './Canvas.css';
+import { ColorCounter } from './controlsSlice';
 
 export const refCanvas = createRef<HTMLCanvasElement>();
 const refFeature = createRef<HTMLDivElement>();
@@ -43,7 +44,7 @@ const Canvas = () => {
 
 	return (
 		<div id="feature-canvas" ref={refFeature}>
-			<canvas className="empty" ref={refCanvas} onClick={onClick} onMouseDown={onMouseDown} onMouseUp={onMouseUp} />
+			<canvas data-testid="main-canvas" className="empty" ref={refCanvas} onClick={onClick} onMouseDown={onMouseDown} onMouseUp={onMouseUp} />
 		</div>
 	)
 };
@@ -67,8 +68,6 @@ const applyResizeToCanvas = () => {
 	let cWidth = parseInt(cs.getPropertyValue('width'),10);
 	let cHeight = parseInt(cs.getPropertyValue('height'),10);
 
-	console.log({cWidth, cHeight});
-
 	canvas.style.width = (cWidth)+'px';
 	canvas.style.height = (cHeight)+'px';
 	canvas.style.display = 'block';
@@ -76,7 +75,7 @@ const applyResizeToCanvas = () => {
 	return { cWidth, cHeight };
 };
 
-export const setImageToCanvas = (image: HTMLImageElement) : {colors?: any} => {
+export const setImageToCanvas = (image: HTMLImageElement) : {colors?: ColorCounter} => {
 	const div = refFeature.current;
 	const canvas = refCanvas.current;
 	if (!canvas || !div) return { };
@@ -162,7 +161,7 @@ export const getFileAsBase64 = (file: File): Promise<string | undefined> => {
 export const createImageFromBase64 = (base64: string): Promise<HTMLImageElement> => {
 	return new Promise(resolve => {
 		const img = new Image();
-		img.onload = () => resolve(img);
+		img.onload = (e) => resolve(img);
 		img.src = base64;
 	});
 };

@@ -33,7 +33,7 @@ const FilePicker = () => {
 
 	return (
 		<div id='feature-filepicker'>
-			<input type='file' ref={ref} onChange={onChange} />
+			<input data-testid='filepicker-file' type='file' ref={ref} onChange={onChange} />
 			<MenuButton code='filepicker' icon='file' label='Load Image' onClick={onClick} />
 		</div>
 	)
