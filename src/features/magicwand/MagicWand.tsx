@@ -139,13 +139,13 @@ const getAreaAroundPoint = (clicked: Point, extra: boolean = false) => {
 // paints a red pixel based on a pixel xy position
 const paintBorder = (id: number) => {
 	const p = canvasGrid[id];
-	if (p) 	paintPixel(p.x, p.y, [255,0,0]);
+	if (p) paintPixel(p.x, p.y, [255,0,0]);
 }
 
 // paints the actual pixel back to its xy position
 const paintPoint = (id: number) => {
 	const p = canvasGrid[id];
-	paintPixel(p.x, p.y, p.rgb);
+	if (p) paintPixel(p.x, p.y, p.rgb);
 }
 
 // ===== COLOR DELTA ================================================
