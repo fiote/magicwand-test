@@ -1,7 +1,6 @@
 import React, { createRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../app/store';
-import { removeCanvasListeners } from '../canvas/Canvas';
 import { MenuState, setMenuActive } from './menuSlice';
 
 interface MenuButtonParams {
@@ -21,7 +20,6 @@ const MenuButton = (params: MenuButtonParams) => {
 	const btnClass = `ui ${active} labeled icon basic button`;
 
 	const onClick = () => {
-		removeCanvasListeners();
 		if (params.code) dispatch(setMenuActive(params.code));
 		if (params.onClick) params.onClick();
 		ref.current?.blur();

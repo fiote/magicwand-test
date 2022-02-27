@@ -1,4 +1,7 @@
 import React, { createRef, useLayoutEffect } from 'react';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../app/store';
+import { MenuState } from '../menu/menuSlice';
 import './Canvas.css';
 import { ColorCounter } from './controlsSlice';
 
@@ -6,6 +9,7 @@ export const refCanvas = createRef<HTMLCanvasElement>();
 const refFeature = createRef<HTMLDivElement>();
 
 const Canvas = () => {
+	const menu = useSelector<RootState>((state) => state.menu) as MenuState;
 
 	useLayoutEffect(() => {
 		window.addEventListener('resize',applyResizeToCanvas);
@@ -14,12 +18,12 @@ const Canvas = () => {
 
 	const onMouseDown = (event: React.MouseEvent) => {
 		const { offsetX: x, offsetY: y } = event.nativeEvent;
-		listeners.onMouseDown?.call(null, x, y);
+		listeners[menu.active+'@onMouseDown']?.call(null, x, y);
 	};
 
 	const onMouseUp = (event: React.MouseEvent) => {
 		const { offsetX: x, offsetY: y } = event.nativeEvent;
-		listeners.onMouseUp?.call(null, x, y);
+		listeners[menu.active+'@onMouseUp']?.call(null, x, y);
 	};
 
 	return (
@@ -40,13 +44,8 @@ const listeners = {
 	[key: string]: IMousePoint;
 }
 
-export const setCanvasListener = (key: string, fn: IMousePoint) => {
-	listeners[key] = fn;
-};
-
-export const removeCanvasListeners = () => {
-	const keys = Object.keys(listeners);
-	keys.forEach(key => delete listeners[key]);
+export const setCanvasListener = (code:string, key: string, fn: IMousePoint) => {
+	listeners[code+'@'+key] = fn;
 };
 
 // ===== FEATURE VARIABLES ==========================================
@@ -196,24 +195,6 @@ export const paintPixel = (x: number, y: number, rgb: v3) => {
 	brushData[3] = 255;
 	ctx.putImageData(brush, x, y);
 }
-
-// ===== IMAGE FUNCTIONS ============================================
-
-export const getFileAsBase64 = (file: File): Promise<string | undefined> => {
-	return new Promise(resolve => {
-		var fr = new FileReader();
-		fr.onload = () => resolve(fr.result?.toString());
-		fr.readAsDataURL(file);
-	});
-};
-
-export const createImageFromBase64 = (base64: string): Promise<HTMLImageElement> => {
-	return new Promise(resolve => {
-		const img = new Image();
-		img.onload = (e) => resolve(img);
-		img.src = base64;
-	});
-};
 
 // ===== COLOR FUNCTIONS ============================================
 

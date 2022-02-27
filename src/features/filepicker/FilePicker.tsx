@@ -1,6 +1,6 @@
 import React, { createRef } from 'react';
 import { useDispatch } from 'react-redux';
-import { createImageFromBase64, getFileAsBase64, setImageToCanvas } from '../canvas/Canvas';
+import { setImageToCanvas } from '../canvas/Canvas';
 import { setColors } from '../canvas/controlsSlice';
 import MenuButton from '../menu/MenuButton';
 import { setMenuActive } from '../menu/menuSlice';
@@ -28,7 +28,7 @@ const FilePicker = () => {
 		dispatch(setColors(colors));
 
 		ref.current.value = '';
-		dispatch(setMenuActive(''));
+		dispatch(setMenuActive('magicwand'));
 	};
 
 	return (
@@ -38,5 +38,23 @@ const FilePicker = () => {
 		</div>
 	)
 }
+
+
+const getFileAsBase64 = (file: File): Promise<string | undefined> => {
+	return new Promise(resolve => {
+		var fr = new FileReader();
+		fr.onload = () => resolve(fr.result?.toString());
+		fr.readAsDataURL(file);
+	});
+};
+
+const createImageFromBase64 = (base64: string): Promise<HTMLImageElement> => {
+	return new Promise(resolve => {
+		const img = new Image();
+		img.onload = (e) => resolve(img);
+		img.src = base64;
+	});
+};
+
 
 export default FilePicker;

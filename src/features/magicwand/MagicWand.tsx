@@ -1,22 +1,15 @@
 import React from 'react';
-import { canvasGrid, getCanvasPoint, getPointId, paintPixel, Point, readCanvasGrid, refCanvas, setCanvasListener, v3 } from '../canvas/Canvas';
+import { canvasGrid, getCanvasPoint, getPointId, paintPixel, Point, readCanvasGrid, setCanvasListener, v3 } from '../canvas/Canvas';
 import MenuButton from '../menu/MenuButton';
 
 const MagicWand = () => {
-
-	const onClick = () => {
-		const canvas = refCanvas.current;
-
-		setCanvasListener('onMouseUp', (x, y) => {
-			execMagicWandAt(x,y);
-		});
-
-		if (!canvas) return;
-	};
+	setCanvasListener('magicwand', 'onMouseUp', (x, y) => {
+		execMagicWandAt(x,y);
+	});
 
 	return (
 		<div id='feature-magicwand'>
-			<MenuButton code='magicwand' icon='magic' label='Magic Wand' onClick={onClick} />
+			<MenuButton code='magicwand' icon='magic' label='Magic Wand' />
 		</div>
 	)
 }
