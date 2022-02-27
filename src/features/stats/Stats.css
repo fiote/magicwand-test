@@ -1,10 +1,13 @@
 #feature-stats {
   height: 100vh;
   padding: 10px 15px 10px 10px;
-  overflow-y: auto;
+  display: grid;
+  grid-template-rows: 4fr 1fr;
+  row-gap: 10px;
 }
 #feature-stats .stat-block {
-  margin-bottom: 20px;
+  overflow-y: auto;
+  padding-right: 5px;
 }
 #feature-stats .stat-block h4 {
   margin-bottom: 5px;
@@ -21,4 +24,7 @@
 }
 #feature-stats .stat-block .color-row .color-count {
   text-align: right;
+}
+#feature-stats .block-count {
+  font-weight: normal;
 }
