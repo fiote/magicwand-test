@@ -1,8 +1,10 @@
 
 const cyGetOptions = { timeout: 5000 };
 
-export const openImage = (name: string, visit: boolean = true) => {
-	if (visit) cy.visit('http://localhost:3000/');
+export const openImage = (name: string) => {
+	cy.viewport(1000, 660);
+
+	cy.visit('http://localhost:3000/');
 
 	cy.fixture(name).then(fileContent => {
 		cy.get('[data-testid="filepicker-file"]').attachFile({
@@ -16,6 +18,10 @@ export const openImage = (name: string, visit: boolean = true) => {
 
 export const clickCanvas = (x: number, y: number) => {
 	cy.get('[data-testid="main-canvas"]', cyGetOptions).click(x, y, {force: true});
+}
+
+export const setTolerance = (value: number) => {
+	cy.get('#tolerance').invoke('val', value).trigger('mouseup');
 }
 
 export const checkRow = (block: string, index: number, hex: string, count: number) => {
