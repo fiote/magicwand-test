@@ -32,6 +32,5 @@ export const checkCount = (block: string, index: number, count: number) => {
 }
 
 export const checkTotal = (block: string, total: number) => {
-	const cyget = cy.get(`.stat-block.${block} .color-row`, cyGetOptions);
-	(total) ? cyget.its('length').should('eq', total) : cyget.should('not.exist');
+	cy.get(`.stat-block.${block} .block-count`, cyGetOptions).should('contain', total);
 }

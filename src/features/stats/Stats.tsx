@@ -32,7 +32,7 @@ const CanvasStats = () => {
 
 		return (
 			<div key={block} className={classes}>
-				<h4>{block}</h4>
+				<h4>{block} (<span className='block-count'>{colorDivs.length}</span>)</h4>
 				{colorDivs}
 			</div>
 		)
