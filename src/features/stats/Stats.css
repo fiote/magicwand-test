@@ -3,16 +3,22 @@
   padding: 10px 15px 10px 10px;
   overflow-y: auto;
 }
-#feature-stats .color-row {
+#feature-stats .stat-block {
+  margin-bottom: 20px;
+}
+#feature-stats .stat-block h4 {
+  margin-bottom: 5px;
+}
+#feature-stats .stat-block .color-row {
   display: grid;
   grid-template-columns: 20px auto 60px;
   column-gap: 5px;
   margin-bottom: 5px;
 }
-#feature-stats .color-row .color-square {
+#feature-stats .stat-block .color-row .color-square {
   width: 20px;
   height: 20px;
 }
-#feature-stats .color-row .color-count {
+#feature-stats .stat-block .color-row .color-count {
   text-align: right;
 }

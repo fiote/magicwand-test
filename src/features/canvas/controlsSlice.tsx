@@ -7,7 +7,7 @@ export interface ColorCounter {
 
 
 export interface ControlsSliceState {
-	colors: ColorCounter
+	[key: string]: ColorCounter
 }
 
 export const ControlsSlice = createSlice({
@@ -18,7 +18,8 @@ export const ControlsSlice = createSlice({
 
 	reducers: {
 		setColors(state, action) {
-			state.colors = action.payload;
+			const { key, list } = action.payload;
+			state[key] = list;
 		},
 	},
 })

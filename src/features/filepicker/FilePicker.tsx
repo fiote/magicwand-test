@@ -25,7 +25,7 @@ const FilePicker = () => {
 
 		const image = await createImageFromBase64(base64);
 		const { colors } = await setImageToCanvas(image);
-		dispatch(setColors(colors));
+		dispatch(setColors({key: 'Pixels', list: colors}));
 
 		ref.current.value = '';
 		dispatch(setMenuActive('magicwand'));

@@ -1,10 +1,15 @@
 import React from 'react';
+import { useDispatch } from 'react-redux';
 import { canvasGrid, getCanvasPoint, getPointId, paintPixel, Point, readCanvasGrid, setCanvasListener, v3 } from '../canvas/Canvas';
+import { ColorCounter, setColors } from '../canvas/controlsSlice';
 import MenuButton from '../menu/MenuButton';
 
 const MagicWand = () => {
+	const dispatch = useDispatch();
+
 	setCanvasListener('magicwand', 'onMouseUp', (x, y) => {
-		execMagicWandAt(x,y);
+		const { colors } = execMagicWandAt(x,y);
+		dispatch(setColors({key: 'Selection', list: colors}));
 	});
 
 	return (
@@ -23,6 +28,8 @@ let paintedBorder = [] as number[];
 let selectedArea = [] as number[];
 
 const execMagicWandAt = (x: number, y: number) => {
+	const colors = {} as ColorCounter;
+
 	// 'unpaiting' any border already painted
 	paintedBorder.forEach(id => paintPoint(id));
 	// resetting the border data
@@ -32,11 +39,11 @@ const execMagicWandAt = (x: number, y: number) => {
 	// get the clicked point based on its xy
 	const point = getCanvasPoint(x,y);
 	// if it does not exist, stop here
-	if (!point) return;
+	if (!point) return { colors };
 	// if we're clicking inside of the selected area, stop here
 	if (selectedArea.includes(point.id)) {
 		selectedArea = [];
-		return;
+		return { colors };
 	}
 	// getting the area around the point
 	const {area, border} = getAreaAroundPoint(point);
@@ -45,6 +52,15 @@ const execMagicWandAt = (x: number, y: number) => {
 	// storing the data
 	paintedBorder = border;
 	selectedArea = area;
+
+	area.forEach(id => {
+		const p = canvasGrid[id];
+		const color = p.color;
+		if (!colors[color]) colors[color] = 0;
+		colors[color]++;
+	});
+
+	return { colors };
 }
 
 const adders = [[0,-1], [0,+1], [-1,0], [+1,0]];
@@ -52,8 +68,6 @@ let nextBlockId = 0;
 
 // flags the whole canvasGrid based on the clicked pixel and the selected tolerance, the get the affected area and its border
 const getAreaAroundPoint = (clicked: Point, extra: boolean = false) => {
-	console.log('getAreaAroundPoint()');
-	console.log(clicked);
 
 	// create a map to mark every pixel with the answer "does this color is within tolerance-distance of thec clicked point?""
 	const map = [] as number[][];
