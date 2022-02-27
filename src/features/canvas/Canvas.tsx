@@ -124,6 +124,7 @@ export const setImageToCanvas = (image: HTMLImageElement) : {colors?: ColorCount
 	bounds.max.x = sx + iWidth;
 	bounds.max.y = sy + iHeight;
 
+	ctx.imageSmoothingEnabled = false;
     ctx.drawImage(image, sx, sy, iWidth, iHeight);
 	readCanvasGrid();
 	const colors = getCanvasColors();
