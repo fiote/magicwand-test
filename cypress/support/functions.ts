@@ -1,3 +1,6 @@
+
+const cyGetOptions = { timeout: 5000 };
+
 export const openImage = (name: string, visit: boolean = true) => {
 	if (visit) cy.visit('http://localhost:3000/');
 
@@ -7,22 +10,36 @@ export const openImage = (name: string, visit: boolean = true) => {
 			fileName: name,
 			encoding: "base64"
 		});
+		cy.get(`.stat-block.pixels .color-row`, cyGetOptions).should('exist');
 	});
 }
 
-export const checkPixels = (hex1: string, hex2: string, count3: number, count4: number, total: number) => {
-	checkColorStats('pixels', hex1, hex2, count3, count4, total);
+export const clickCanvas = (x: number, y: number) => {
+	cy.get('[data-testid="main-canvas"]', cyGetOptions).click(x, y, {force: true});
 }
 
-export const checkSelection = (hex1: string, hex2: string, count3: number, count4: number, total: number) => {
-	checkColorStats('selection', hex1, hex2, count3, count4, total);
+export const checkPixels = (hex0: string, hex1: string, count2: number, count3: number, total: number) => {
+	checkLabel('pixels', 0, hex0);
+	checkLabel('pixels', 1, hex1);
+	checkCount('pixels', 2, count2);
+	checkCount('pixels', 3, count3);
+	checkTotal('pixels', total);
 }
 
-const checkColorStats = (code: string, hex1: string, hex2: string, count3: number, count4: number, total: number) => {
-	const block = cy.get('.stat-block.'+code);
-	block.get('.color-row:eq(0) .color-label', { timeout: 5000 }).should('contain', hex1);
-	block.get('.color-row:eq(1) .color-label', { timeout: 5000 }).should('contain', hex2);
-	block.get('.color-row:eq(2) .color-count', { timeout: 5000 }).should('contain', count3);
-	block.get('.color-row:eq(3) .color-count', { timeout: 5000 }).should('contain', count4);
-	block.get('.color-row').its('length').should('eq', total);
+export const checkSelection = (index: number, hex: string, count: number) => {
+	cy.get(`.stat-block.selection .color-row:eq(${index}) .color-label`, cyGetOptions).should('contain', hex);
+	cy.get(`.stat-block.selection .color-row:eq(${index}) .color-count`, cyGetOptions).should('contain', count);
+}
+
+export const checkLabel = (block: string, index: number, hex: string) => {
+	cy.get(`.stat-block.${block} .color-row:eq(${index}) .color-label`, cyGetOptions).should('contain', hex);
+}
+
+export const checkCount = (block: string, index: number, count: number) => {
+	cy.get(`.stat-block.${block} .color-row:eq(${index}) .color-count`, cyGetOptions).should('contain', count);
+}
+
+export const checkTotal = (block: string, total: number) => {
+	const cyget = cy.get(`.stat-block.${block} .color-row`, cyGetOptions);
+	(total) ? cyget.its('length').should('eq', total) : cyget.should('not.exist');
 }
