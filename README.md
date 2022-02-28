@@ -1,6 +1,6 @@
 # Frontend Engineer Test: Magic Wand
 
-Try it out! [magicwand-test/master/build/index.html](https://rawcdn.githack.com/fiote/magicwand-test/master/build/index.html?t=1)
+Try it out! [(click here!)](https://fiote.github.io/magicwand-test/build)
 
 ![Preview](readmefiles/preview.png "Preview")
 
